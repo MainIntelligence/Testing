@@ -1,13 +1,17 @@
 #pragma once
-
-#define DISPROVE_CHECK(x) if (!(x)) {\
-fprintf(stderr, "\033[31mFAILED CHECK - %s\n       FILE: %s\n       LINE: %d\033[0m\n", #x, __FILE__, __LINE__);\
-return false;\
-}
-
-
+/* Types for detecting presence of comparison operators on another type, and testing that expected
+*    truths for comparisons holds for some specified test cases. NEED -fconcepts CXX FLAG TO COMPILE
+*  Example Usage:
+*    std::string a = "A"; std::string b = "B"; //Declare test cases
+*    Compare::Tester<std::string> tester; //Declare unitype comparison tester (for std::string)
+*    //next line returns true and prints nothing for correct std::string implementation since std::string implements
+*		(lexical) comparison operators, and "A" is lexically less than "B"
+*    tester.Test(a, b, Compare::Assertion::Less);
+*/ 
 namespace Compare {
-//Strong assertions, which imply the result of any defined comparison
+	
+/* Strong assertions, which imply the result of any defined comparison. Use to assert how
+* objects relate in a test. (any comparison contradicting this relation causes the test to fail)*/
 enum class Assertion { Equal, Less, Greater };
 
 //this here will test that all defined comparison operators agree with each other, 
@@ -35,6 +39,10 @@ bool TriCompare(const T1 o1, const T2 o2, const T3 o3);
 /*************************************************************************************
 //************************* IMPLEMENTATION DETAILS BELOW *****************************
 **************************************************************************************/
+#define DISPROVE_CHECK(x) if (!(x)) {\
+fprintf(stderr, "\033[31mFAILED CHECK - %s\n       FILE: %s\n       LINE: %d\033[0m\n", #x, __FILE__, __LINE__);\
+return false;\
+}
 
 //concepts to check that certain members are defined
 template <typename T1, typename T2>
