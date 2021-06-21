@@ -56,7 +56,7 @@ template <typename T1, typename T2>
 concept GeqDefined = requires(const T1 & obj1, const T2 & obj2) { obj1.operator>=(obj2); };
 
 template <typename T1, typename T2>
-bool Tester::TestForward(T1 obj1, T2 obj2, Assertion assert) {
+bool Tester<T1, T2>::TestForward(T1 obj1, T2 obj2, Assertion assert) {
 		if (assert == Assertion::Equal) {
 			if constexpr (EqDefined<T1, T2>) {
 				DISPROVE_CHECK(obj1 == obj2)
@@ -121,7 +121,7 @@ bool Tester::TestForward(T1 obj1, T2 obj2, Assertion assert) {
 }
 	
 template <typename T1, typename T2>
-bool Tester::TestBackward(T1 obj1, T2 obj2, Assertion assert) {
+bool Tester<T1, T2>::TestBackward(T1 obj1, T2 obj2, Assertion assert) {
 		if (assert == Assertion::Less) {
 			return TestForward(obj2, obj1, Assertion::Greater);
 		}
@@ -133,11 +133,6 @@ bool Tester::TestBackward(T1 obj1, T2 obj2, Assertion assert) {
 		}
 }
 	
-template <typename T1, typename T2>
-bool Tester::Test(T1 obj1, T2 obj2, Assertion assert) {
-		return TestForward(obj1, obj2, assert) && TestBackward(obj1, obj2, assert);
-}
-
 //Test to ensure that equality and inequality are exact opposites (nothing can be both true and false, or neither true nor false)
 template <typename T1, typename T2>
 bool IsLogicallyValid(const T1 o1, const T2 o2) { //!( ((T & F) | (!T & !F)) | ((Tr & Fr) | (!Tr & !Fr)) )
