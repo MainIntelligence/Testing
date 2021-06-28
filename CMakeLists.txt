@@ -4,7 +4,9 @@ cmake_minimum_required(VERSION 3.5)
 project(Test)
 
 SET(PROJECT_MAJOR MI)
-SET(INCLUDE_DIRS Detection)
+SET(INCLUDE_DIRS)
+
+list(APPEND INCLUDE_DIRS Detection Utils)
 
 #add_subdirectory(Detection)
 
